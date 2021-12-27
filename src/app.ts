@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes";
+import specialRoutes from "./routes/special.routes";
 import passport from "passport";
 import passportMiddleware from "./middlewares/passport";
 
@@ -25,5 +26,6 @@ app.get("/", (req, res) => {
 });
 
 app.use(authRoutes);
+app.use(specialRoutes);
 
 export default app;

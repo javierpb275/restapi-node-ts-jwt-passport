@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
+const special_routes_1 = __importDefault(require("./routes/special.routes"));
 const passport_1 = __importDefault(require("passport"));
 const passport_2 = __importDefault(require("./middlewares/passport"));
 //initializations
@@ -25,4 +26,5 @@ app.get("/", (req, res) => {
     res.send(`API at http://localhost:${app.get("port")}`);
 });
 app.use(auth_routes_1.default);
+app.use(special_routes_1.default);
 exports.default = app;
