@@ -14,6 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signIn = exports.signUp = void 0;
 const user_1 = __importDefault(require("../models/user"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const config_1 = __importDefault(require("../config/config"));
+const createToken = (user) => {
+    return jsonwebtoken_1.default.sign({ id: user._id, email: user.email }, config_1.default.jwtSecret, {
+        expiresIn: 86400,
+    });
+};
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.body.email || !req.body.password) {
         return res
@@ -43,6 +50,6 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!isMatch) {
         return res.status(400).json({ msg: "Wrong credentials" });
     }
-    return res.send("signin");
+    return res.status(200).json({ token: createToken(user) });
 });
 exports.signIn = signIn;

@@ -1,5 +1,13 @@
 import { Request, Response } from "express";
 import User, { IUser } from "../models/user";
+import jwt from "jsonwebtoken";
+import config from "../config/config";
+
+const createToken = (user: IUser): string => {
+  return jwt.sign({ id: user._id, email: user.email }, config.jwtSecret, {
+    expiresIn: 86400,
+  });
+};
 
 export const signUp = async (
   req: Request,
@@ -36,5 +44,5 @@ export const signIn = async (
   if (!isMatch) {
     return res.status(400).json({ msg: "Wrong credentials" });
   }
-  return res.send("signin");
+  return res.status(200).json({ token: createToken(user) });
 };
