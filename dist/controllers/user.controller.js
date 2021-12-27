@@ -29,7 +29,20 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.status(201).json(newUser);
 });
 exports.signUp = signUp;
-const signIn = (req, res) => {
-    res.send("signin");
-};
+const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.body.email || !req.body.password) {
+        return res
+            .status(400)
+            .json({ msg: "Please. Send your email and password" });
+    }
+    const user = yield user_1.default.findOne({ email: req.body.email });
+    if (!user) {
+        return res.status(400).json({ msg: "Wrong credentials" });
+    }
+    const isMatch = yield user.comparePassword(req.body.password);
+    if (!isMatch) {
+        return res.status(400).json({ msg: "Wrong credentials" });
+    }
+    return res.send("signin");
+});
 exports.signIn = signIn;

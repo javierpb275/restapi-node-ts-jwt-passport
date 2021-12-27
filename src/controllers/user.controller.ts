@@ -19,6 +19,22 @@ export const signUp = async (
   return res.status(201).json(newUser);
 };
 
-export const signIn = (req: Request, res: Response) => {
-  res.send("signin");
+export const signIn = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  if (!req.body.email || !req.body.password) {
+    return res
+      .status(400)
+      .json({ msg: "Please. Send your email and password" });
+  }
+  const user: IUser | null = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res.status(400).json({ msg: "Wrong credentials" });
+  }
+  const isMatch: boolean = await user.comparePassword(req.body.password);
+  if (!isMatch) {
+    return res.status(400).json({ msg: "Wrong credentials" });
+  }
+  return res.send("signin");
 };
